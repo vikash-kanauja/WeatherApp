@@ -12,12 +12,15 @@ const loader = document.getElementById("loader");
 const weatherImg = document.getElementById("weatherImg");
 const errorMessage = document.getElementById("error");
 
+
 // API key and base URL for OpenWeatherMap API
 const API_KEY = "82005d27a116c2880c8f0fcb866998a0";
 const baseUrl = "http://api.openweathermap.org/data/2.5/weather?";
 
 // Function to update the UI with weather details
 const getWeatherDetails = (weatherinfo) => {
+  
+  
   loader.classList.add("hidden");
   weatherbox.classList.remove("hidden");
   locationError.classList.add("hidden");
@@ -28,6 +31,8 @@ const getWeatherDetails = (weatherinfo) => {
   weatherDescription.innerText = weatherinfo.weather[0].description;
   weatherImg.src = "./images/" + weatherinfo.weather[0].icon + ".png";
   temprature.innerText = (weatherinfo.main.temp - 273.15).toFixed(1) + " °C";
+  document.body.style.backgroundImage =`url(images/${weatherinfo.weather[0].main}.jpg)`
+
 };
 
 // Function to fetch weather details based on city name

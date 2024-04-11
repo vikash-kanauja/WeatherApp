@@ -35,7 +35,7 @@ const fetchDatafromCoordinates = async (lat,lon) => {
     );
      
   } catch (error) {
-    apiErrorHandle();
+    showErrorMessage();
   }
 };
 
@@ -62,7 +62,7 @@ const getCityCoordinates = async () => {
       fetchDatafromCoordinates(data.coord.lat,data.coord.lon);
     })
     .catch(() => {
-      apiErrorHandle();
+      showErrorMessage();
     });
 };
 
@@ -103,7 +103,7 @@ searchInput.addEventListener("change", () => {
 // Fetch weather data based on user's current location
 getUserCoordinates();
 
-const apiErrorHandle =() =>{
+const showErrorMessage =() =>{
   loader.classList.add("hidden");
   weatherbox.classList.add("hidden");
   locationError.classList.remove("hidden");

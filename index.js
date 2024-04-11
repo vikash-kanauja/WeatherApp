@@ -16,7 +16,7 @@ const API_KEY = "82005d27a116c2880c8f0fcb866998a0";
 const baseUrl = "http://api.openweathermap.org/data/2.5/weather?";
 
 // Function to update the UI with weather details
-const getWeatherDetails = (weatherinfo) => {
+const showWeatherDetails = (weatherinfo) => {
   loader.classList.add("hidden");
   weatherbox.classList.remove("hidden");
   locationError.classList.add("hidden");
@@ -35,11 +35,7 @@ const fetchDatafromCoordinates = async (data) => {
     const url = `${baseUrl}lat=${data.coord.lat}&lon=${data.coord.lon}&appid=${API_KEY}`;
     await fetch(url)
       .then((response) => response.json())
-      .then((data) =>
-      { getWeatherDetails(data)
-        console.log(data);
-      }
-      
+      .then((data) => showWeatherDetails(data) 
     );
      
   } catch (error) {
@@ -70,7 +66,6 @@ const getCityCoordinates = async () => {
   await fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       fetchDatafromCoordinates(data);
     })
     .catch(() => {
@@ -96,7 +91,7 @@ const getUserCoordinates = () => {
       await fetch(url)
         .then((response) => response.json())
         .then((data) => {
-          getWeatherDetails(data);
+          showWeatherDetails(data);
         })
         .catch(() => {
           weatherbox.classList.add("hidden");

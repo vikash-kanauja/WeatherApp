@@ -26,19 +26,16 @@ const showWeatherDetails = (weatherinfo) => {
   document.body.style.backgroundImage = `url(images/${weatherinfo.weather[0].main}.jpg)`;
 };
 
-const fetchDatafromCoordinates = async (data) => {
+const fetchDatafromCoordinates = async (lat,lon) => {
   try {
-    const url = `${baseUrl}lat=${data.coord.lat}&lon=${data.coord.lon}&appid=${API_KEY}`;
+    const url = `${baseUrl}lat=${lat}&lon=${lon}&appid=${API_KEY}`;
     await fetch(url)
       .then((response) => response.json())
       .then((data) => showWeatherDetails(data) 
     );
      
   } catch (error) {
-    loader.classList.add("hidden");
-    weatherbox.classList.add("hidden");
-    locationError.classList.remove("hidden");
-    errorMessage.innerText = "Oops city not found.";
+    apiErrorHandle();
   }
 };
 
@@ -62,13 +59,10 @@ const getCityCoordinates = async () => {
   await fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      fetchDatafromCoordinates(data);
+      fetchDatafromCoordinates(data.coord.lat,data.coord.lon);
     })
     .catch(() => {
-      loader.classList.add("hidden");
-      weatherbox.classList.add("hidden");
-      locationError.classList.remove("hidden");
-      errorMessage.innerText = "Oops city not found.";
+      apiErrorHandle();
     });
 };
 
@@ -80,20 +74,7 @@ const getUserCoordinates = () => {
       loader.classList.remove("hidden");
       weatherbox.classList.add("hidden");
       locationError.classList.add("hidden");
-
-      const url = `${baseUrl}lat=${latitude}&lon=${longitude}&appid=${API_KEY}`;
-
-      // Fetch weather data from the API
-      await fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-          showWeatherDetails(data);
-        })
-        .catch(() => {
-          weatherbox.classList.add("hidden");
-          locationError.classList.remove("hidden");
-          loader.classList.add('hidden')
-        });
+      fetchDatafromCoordinates(latitude,longitude)
     },
     (error) => {
       if (error.code === error.PERMISSION_DENIED) {
@@ -122,13 +103,21 @@ searchInput.addEventListener("change", () => {
 // Fetch weather data based on user's current location
 getUserCoordinates();
 
+const apiErrorHandle =() =>{
+  loader.classList.add("hidden");
+  weatherbox.classList.add("hidden");
+  locationError.classList.remove("hidden");
+  errorMessage.innerText = "Oops city not found.";
+}
+
 // Event listener for search button click
 searchButton.addEventListener("click", getCityCoordinates);
+
 // Execute a function when the user presses a key on the keyboard
 searchInput.addEventListener("keypress", function(event) {
+
   // If the user presses the "Enter" key on the keyboard
   if (event.key === "Enter") {
-    
     event.preventDefault();
     getCityCoordinates()
     }

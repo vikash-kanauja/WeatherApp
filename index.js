@@ -1,12 +1,10 @@
 const searchInput = document.getElementById("search__input");
 const searchButton = document.getElementById("search__btn");
 const cityLocation = document.getElementById("location");
-const humidity = document.getElementById("humidity");
 const weatherDescription = document.getElementById("description");
 const locationError = document.querySelector(".location__error");
 const weatherbox = document.getElementById("weather__box");
 const temprature = document.getElementById("temp");
-const wind = document.getElementById("wind");
 const loader = document.getElementById("loader");
 const weatherImg = document.getElementById("weatherImg");
 const errorMessage = document.getElementById("error");
@@ -22,11 +20,9 @@ const showWeatherDetails = (weatherinfo) => {
   locationError.classList.add("hidden");
   searchInput.value = "";
   cityLocation.innerText = weatherinfo.name + " ," + weatherinfo.sys.country;
-  wind.innerText = weatherinfo.wind.speed + " km/h";
-  humidity.innerText = weatherinfo.main.humidity + " %";
   weatherDescription.innerText = weatherinfo.weather[0].description;
   weatherImg.src = "./images/" + weatherinfo.weather[0].icon + ".png";
-  temprature.innerText = (weatherinfo.main.temp - 273.15).toFixed(1) + " °C";
+  temprature.innerText = (weatherinfo.main.temp - 273.15).toFixed(1) + "°";
   document.body.style.backgroundImage = `url(images/${weatherinfo.weather[0].main}.jpg)`;
 };
 

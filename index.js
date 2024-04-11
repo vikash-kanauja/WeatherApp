@@ -1,4 +1,3 @@
-// Selecting DOM elements
 const searchInput = document.getElementById("search__input");
 const searchButton = document.getElementById("search__btn");
 const cityLocation = document.getElementById("location");
@@ -12,27 +11,43 @@ const loader = document.getElementById("loader");
 const weatherImg = document.getElementById("weatherImg");
 const errorMessage = document.getElementById("error");
 
-
 // API key and base URL for OpenWeatherMap API
 const API_KEY = "82005d27a116c2880c8f0fcb866998a0";
 const baseUrl = "http://api.openweathermap.org/data/2.5/weather?";
 
 // Function to update the UI with weather details
 const getWeatherDetails = (weatherinfo) => {
-  
-  
   loader.classList.add("hidden");
   weatherbox.classList.remove("hidden");
   locationError.classList.add("hidden");
   searchInput.value = "";
-  cityLocation.innerText = weatherinfo.name;
+  cityLocation.innerText = weatherinfo.name + " ," + weatherinfo.sys.country;
   wind.innerText = weatherinfo.wind.speed + " km/h";
-  humidity.innerText = weatherinfo.main.humidity;
+  humidity.innerText = weatherinfo.main.humidity + " %";
   weatherDescription.innerText = weatherinfo.weather[0].description;
   weatherImg.src = "./images/" + weatherinfo.weather[0].icon + ".png";
   temprature.innerText = (weatherinfo.main.temp - 273.15).toFixed(1) + " °C";
-  document.body.style.backgroundImage =`url(images/${weatherinfo.weather[0].main}.jpg)`
+  document.body.style.backgroundImage = `url(images/${weatherinfo.weather[0].main}.jpg)`;
+};
 
+const fetchDatafromCoordinates = async (data) => {
+  try {
+    const url = `${baseUrl}lat=${data.coord.lat}&lon=${data.coord.lon}&appid=${API_KEY}`;
+    await fetch(url)
+      .then((response) => response.json())
+      .then((data) =>
+      { getWeatherDetails(data)
+        console.log(data);
+      }
+      
+    );
+     
+  } catch (error) {
+    loader.classList.add("hidden");
+    weatherbox.classList.add("hidden");
+    locationError.classList.remove("hidden");
+    errorMessage.innerText = "Oops city not found.";
+  }
 };
 
 // Function to fetch weather details based on city name
@@ -50,12 +65,13 @@ const getCityCoordinates = async () => {
   }
 
   const url = `${baseUrl}q=${cityName}&appid=${API_KEY}`;
-  
+
   // Fetch weather data from the API
   await fetch(url)
     .then((response) => response.json())
     .then((data) => {
-      getWeatherDetails(data);
+      console.log(data);
+      fetchDatafromCoordinates(data);
     })
     .catch(() => {
       loader.classList.add("hidden");
@@ -75,7 +91,7 @@ const getUserCoordinates = () => {
       locationError.classList.add("hidden");
 
       const url = `${baseUrl}lat=${latitude}&lon=${longitude}&appid=${API_KEY}`;
-      
+
       // Fetch weather data from the API
       await fetch(url)
         .then((response) => response.json())
@@ -84,7 +100,8 @@ const getUserCoordinates = () => {
         })
         .catch(() => {
           weatherbox.classList.add("hidden");
-          locationError.classList.add("hidden");
+          locationError.classList.remove("hidden");
+          loader.classList.add('hidden')
         });
     },
     (error) => {
@@ -116,3 +133,12 @@ getUserCoordinates();
 
 // Event listener for search button click
 searchButton.addEventListener("click", getCityCoordinates);
+// Execute a function when the user presses a key on the keyboard
+searchInput.addEventListener("keypress", function(event) {
+  // If the user presses the "Enter" key on the keyboard
+  if (event.key === "Enter") {
+    
+    event.preventDefault();
+    getCityCoordinates()
+    }
+});

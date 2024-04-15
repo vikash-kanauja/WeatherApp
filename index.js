@@ -31,8 +31,8 @@ const showWeatherDetails = (weatherinfo) => {
 };
 
 const fetchDatafromCoordinates = async (lat, lon) => {
-  toggleElements(false, true, true);
   const url = `${baseUrl}lat=${lat}&lon=${lon}&appid=${API_KEY}`;
+  toggleElements(false, true, true);
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -52,6 +52,7 @@ const getCityCoordinates = async () => {
   if (!cityName) {
     return;
   } else {
+    toggleElements(false, true, true);
     const url = `${baseUrl}q=${cityName}&appid=${API_KEY}`;
     try {
       const response = await fetch(url);

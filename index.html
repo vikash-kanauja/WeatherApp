@@ -15,63 +15,39 @@
 
 <body class="bg-blue-400 bg-center bg-cover bg-no-repeat">
   <div class="main min-w-full min-h-[100vh] flex justify-center items-start  ">
-    <div>
-      <div class="title text-white border-green-500 my-4 text-3xl p-4 text-center rounded-md">
-        <h1 class="text-black font-bold text-4xl">Weather App</h1>
+    <div class="2xl:w-1/3">
+      <div class="title text-white border-green-500 my-4 text-3xl p-4 text-center rounded-md 2xl:p-6">
+        <h1 class="text-black font-bold text-4xl xl:text-4xl 2xl:text-8xl">Weather App</h1>
       </div>
-      <div class="wether__container bg-white rounded-md my-4 p-4 ">
-        <div id="search__box " class="max-w-full flex">
-          <input type="text" id="search__input" placeholder="Enter city name"
-            class="p-2 border border-black w-[90%] rounded-l-md border-r-0 outline-none" />
-          <button id="search__btn" class="bg-gray-300  px-4 py-2 rounded-r-md border-black border border-l-0 cursor-pointer">
-            Search
+      <div class="wether__container bg-white rounded-md my-4 p-4 pb-8 2xl:rounded-2xl 2xl:p-12">
+        <div id="search__box " class="max-w-full flex  2xl:m-[2px]">
+          <input type="text" id="search__input" placeholder="Enter city name" 
+            class="p-2 border border-black w-[90%] rounded-l-md border-r-0 outline-none 2xl:p-4 2xl:rounded-l-2xl 2xl:text-3xl 2xl:border-2 2xl:border-r-0" />
+          <button id="search__btn" class="bg-gray-300  px-4 py-2 rounded-r-md border-black border border-l-0 cursor-pointer 2xl:px-6 2xl:py-4  2xl:rounded-r-2xl 2xl:border-2 2xl:border-l-0">
+            <p class="2xl:text-3xl">Search</p>
           </button>
         </div>
         <div class="weather flex justify-center items-center w-full">
           <div id="weather__box"
-            class="w-full flex flex-col justify-center items-center border-1 border-black rounded-md mt-5 hidden ">
-            <h1 class="font-bold text-3xl py-3">Weather</h1>
-            <div class=""><img src="./images/01d.png" id="weatherImg" /></div>
+            class="w-full flex flex-col justify-center items-center rounded-md mt-5 hidden 2xl:rounded-2xl 2xl:gap-4">
+            <h1 class="font-bold text-3xl py-3 2xl:text-6xl">Weather</h1>
+            <div class=" 2xl:w-[250px] 2xl:h-[200px] flex items-center justify-center"><img class=" 2xl:w-[250px] 2xl:h-[200px]" src="./images/01d.png" id="weatherImg" /></div>
             <div class="temprature">
-              <span class="text-3xl" id="temp">33 </span>
+              <span class="text-4xl font-bold	 2xl:text-6xl " id="temp">33 </span><span class="text-2xl font-semibold	2xl:text-4xl 2xl:font-semibold">C</span>
             </div>
-            <div id="description" class="text-2xl">overcast cloud</div>
-            <p id="location" class="text-2xl">Varanasi</p>
-            <div id="weather__conditions" class="my-4 py-2">
-              <div class="w-full flex gap-4 flex-row justify-between">
-                <div class="flex gap-2">
-                  <div class="w-[30px] flex items-center">
-                    <i class="fa-solid fa-droplet text-3xl"></i>
-                  </div>
-                  <div class="flex flex-col">
-                    <div>
-                      <p id="humidity"></p>
-                    </div>
-                    <div class="text-md">Humidity</div>
-                  </div>
-                </div>
-                <div class="w-[30px] flex items-center">
-                  <i class="fa-solid fa-wind text-3xl"></i>
-                </div>
-                <div id="">
-                  <div>
-                    <p id="wind"></p>
-                  </div>
-                  <div>Wind</div>
-                </div>
-              </div>
-            </div>
+            <div id="description" class="text-xl font-medium 2xl:text-4xl">overcast cloud</div>
+            <p id="location" class="text-md font-medium 2xl:text-3xl 2xl:font-medium">Varanasi</p>
           </div>
 
           <div id="loader" class="loading-container hidden">
-            <img src="./images/loader.gif" width="150" height="150" class="" />
+            <img   src="./images/loader.gif" width="150" height="150" class="" />
           </div>
 
           <div class="location__error hidden ">
-            <div class="">
-              <img src="./images/unknown.png" alt="" srcset="" />
+            <div class="flex items-center justify-center">
+              <img class="2xl:w-[200px]" src="./images/unknown.png" alt="" srcset="" />
             </div>
-            <p id="error"></p>
+            <p id="error" class="2xl:text-3xl"></p>
           </div>
 
         </div>

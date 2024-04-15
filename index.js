@@ -30,68 +30,63 @@ const showWeatherDetails = (weatherinfo) => {
   toggleElements(true,false, true);
 };
 
-const fetchDatafromCoordinates = (lat, lon) => {
-    toggleElements(false, true, true);
+const fetchDatafromCoordinates = async (lat, lon) => {
+  toggleElements(false, true, true);
   const url = `${baseUrl}lat=${lat}&lon=${lon}&appid=${API_KEY}`;
-   fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      showWeatherDetails(data)
-    })
-    .catch(() => {
-      toggleElements(true, true, false);
-      errorMessage.innerText = "Oops city not found.";
-    });
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+        toggleElements(true, true, false);
+        errorMessage.innerText = 'Oops, city not found.';
+    }
+    const data = await response.json();
+    showWeatherDetails(data);
+  } catch (error) {
+    throw new Error('Oops, city not found.');
+  }
 };
 
 // Function to fetch weather details based on city name
-const getCityCoordinates =  () => {
-    const cityName =searchInput.value;
+const getCityCoordinates = async () => {
+  const cityName = searchInput.value.trim();
   if (!cityName) {
-    console.log("return");
     return;
-  }else{
-      searchInput.value.trim();
-console.log(cityName);
-  const url = `${baseUrl}q=${cityName}&appid=${API_KEY}`;
-
-  // Fetch weather data from the API
-//   await 
-    fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      fetchDatafromCoordinates(data.coord.lat, data.coord.lon)
-      toggleElements(false, true, true)
-    })
-    .catch(() => {
-    //   showErrorMessage();
-    errorMessage.innerText = "Oops city not found.";
-      toggleElements(true, true, false);
-      
-    });
+  } else {
+    const url = `${baseUrl}q=${cityName}&appid=${API_KEY}`;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        errorMessage.innerText = "Oops, city not found.";
+        toggleElements(true, true, false);
+      }
+      const data = await response.json();
+      fetchDatafromCoordinates(data.coord.lat, data.coord.lon);
+      toggleElements(false, true, true);
+    } catch (error) {
+    throw new Error('Oops, city not found.');
+    }
   }
 };
 
 // Function to fetch weather details based on user's current location
-const getUserCoordinates = () => {
+const getUserCoordinates = async () => {
   toggleElements(true, true, true);
-  navigator.geolocation.getCurrentPosition(
-    // async
-     (position) => {
-      const { latitude, longitude } = position.coords;
-      fetchDatafromCoordinates(latitude, longitude)
-    },
-    (error) => {
-      toggleElements(true, true, false);
-      errorMessage.innerText = "Location not available";
-    }
-  );
+  try {
+    const position = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+    const { latitude, longitude } = position.coords;
+    await fetchDatafromCoordinates(latitude, longitude);
+  } catch (error) {
+    errorMessage.innerText = "Location not available";
+    toggleElements(true, true, false);
+  }
 };
 
 // Disable search button if input is empty
 searchButton.disabled = true;
 searchInput.addEventListener("change", () => {
-  searchButton.disabled = searchInput.value === "";
+ searchButton.disabled = searchInput.value === "";
 });
 
 // Fetch weather data based on user's current location
@@ -106,10 +101,9 @@ searchInput.addEventListener("keypress", function (event) {
   // If the user presses the "Enter" key on the keyboard
   if (event.key === "Enter") {
     event.preventDefault();
-    getCityCoordinates()
-  }else if(searchInput.value =="" && event.keyCode==32){
+    getCityCoordinates();
+  } else if (searchInput.value === "" && event.keyCode === 32) {
     event.preventDefault();
     return;
   }
 });
-
